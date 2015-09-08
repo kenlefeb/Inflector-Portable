@@ -152,10 +152,7 @@ namespace Inflector
         public static string Titleize(this string word)
         {
             return Regex.Replace(Humanize(Underscore(word)), @"\b([a-z])",
-                                 delegate(Match match)
-                                 {
-                                     return match.Captures[0].Value.ToUpper();
-                                 });
+                                 match => match.Captures[0].Value.ToUpper());
         }
 
         public static string Humanize(this string lowercaseAndUnderscoredWord)

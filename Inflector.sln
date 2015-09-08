@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inflector", "Inflector\Inflector.csproj", "{D5677360-4354-4BA3-9E23-DB169C22BEAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inflector.Tests", "Inflector.Tests\Inflector.Tests.csproj", "{48D42B49-DAA7-47BB-9DC2-9BF2013C48C0}"
