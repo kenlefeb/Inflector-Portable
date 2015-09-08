@@ -166,10 +166,7 @@ namespace Inflector
         public static string Pascalize(this string lowercaseAndUnderscoredWord)
         {
             return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)",
-                                 delegate(Match match)
-                                 {
-                                     return match.Groups[1].Value.ToUpper();
-                                 });
+                                 match => match.Groups[1].Value.ToUpper());
         }
 
         public static string Camelize(this string lowercaseAndUnderscoredWord)
