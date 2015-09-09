@@ -1,141 +1,118 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
+using Inflector.Rules;
+using JetBrains.Annotations;
 
 namespace Inflector
 {
-    public static class Inflector
+    public class Inflector
     {
+        private static readonly Dictionary<string, InflectorRuleSet> _localizedRules;
+        private readonly CultureInfo _currentCulture;
+
         #region Default Rules
 
+        //TODO: this will be replaced with a DI engine 
         static Inflector()
         {
-            AddPlural("$", "s");
-            AddPlural("s$", "s");
-            AddPlural("(ax|test)is$", "$1es");
-            AddPlural("(octop|vir|alumn|fung)us$", "$1i");
-            AddPlural("(alias|status)$", "$1es");
-            AddPlural("(bu)s$", "$1ses");
-            AddPlural("(buffal|tomat|volcan)o$", "$1oes");
-            AddPlural("([ti])um$", "$1a");
-            AddPlural("sis$", "ses");
-            AddPlural("(?:([^f])fe|([lr])f)$", "$1$2ves");
-            AddPlural("(hive)$", "$1s");
-            AddPlural("([^aeiouy]|qu)y$", "$1ies");
-            AddPlural("(x|ch|ss|sh)$", "$1es");
-            AddPlural("(matr|vert|ind)ix|ex$", "$1ices");
-            AddPlural("([m|l])ouse$", "$1ice");
-            AddPlural("^(ox)$", "$1en");
-            AddPlural("(quiz)$", "$1zes");
-
-            AddSingular("s$", "");
-            AddSingular("(n)ews$", "$1ews");
-            AddSingular("([ti])a$", "$1um");
-            AddSingular("((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$", "$1$2sis");
-            AddSingular("(^analy)ses$", "$1sis");
-            AddSingular("([^f])ves$", "$1fe");
-            AddSingular("(hive)s$", "$1");
-            AddSingular("(tive)s$", "$1");
-            AddSingular("([lr])ves$", "$1f");
-            AddSingular("([^aeiouy]|qu)ies$", "$1y");
-            AddSingular("(s)eries$", "$1eries");
-            AddSingular("(m)ovies$", "$1ovie");
-            AddSingular("(x|ch|ss|sh)es$", "$1");
-            AddSingular("([m|l])ice$", "$1ouse");
-            AddSingular("(bus)es$", "$1");
-            AddSingular("(o)es$", "$1");
-            AddSingular("(shoe)s$", "$1");
-            AddSingular("(cris|ax|test)es$", "$1is");
-            AddSingular("(octop|vir|alumn|fung)i$", "$1us");
-            AddSingular("(alias|status)es$", "$1");
-            AddSingular("^(ox)en", "$1");
-            AddSingular("(vert|ind)ices$", "$1ex");
-            AddSingular("(matr)ices$", "$1ix");
-            AddSingular("(quiz)zes$", "$1");
-
-            AddIrregular("person", "people");
-            AddIrregular("man", "men");
-            AddIrregular("child", "children");
-            AddIrregular("sex", "sexes");
-            AddIrregular("move", "moves");
-            AddIrregular("goose", "geese");
-            AddIrregular("alumna", "alumnae");
-
-            AddUncountable("equipment");
-            AddUncountable("information");
-            AddUncountable("rice");
-            AddUncountable("money");
-            AddUncountable("species");
-            AddUncountable("series");
-            AddUncountable("fish");
-            AddUncountable("sheep");
-            AddUncountable("deer");
-            AddUncountable("aircraft");
+            _localizedRules = new Dictionary<string, InflectorRuleSet>
+                             {
+                                 {"en", new EnglishCultureRules().RuleSet}
+                             };
         }
 
         #endregion
 
-        private class Rule
+        public Inflector(CultureInfo culture)
         {
-            private readonly Regex _regex;
-            private readonly string _replacement;
+            _currentCulture = culture;
 
-            public Rule(string pattern, string replacement)
+            if (!_localizedRules.ContainsKey(_currentCulture.Name.ToLowerInvariant()))
             {
-                _regex = new Regex(pattern, RegexOptions.IgnoreCase);
-                _replacement = replacement;
-            }
-
-            public string Apply(string word)
-            {
-                if (!_regex.IsMatch(word))
-                {
-                    return null;
-                }
-
-                return _regex.Replace(word, _replacement);
+                //TODO: implementation missing
             }
         }
 
-        private static void AddIrregular(string singular, string plural)
+        public bool SupportsCulture([NotNull] CultureInfo culture)
         {
-            AddPlural("(" + singular[0] + ")" + singular.Substring(1) + "$", "$1" + plural.Substring(1));
-            AddSingular("(" + plural[0] + ")" + plural.Substring(1) + "$", "$1" + singular.Substring(1));
+            if (culture == null) throw new ArgumentNullException(nameof(culture));
+
+            return _localizedRules.ContainsKey(culture.Name);
         }
 
-        private static void AddUncountable(string word)
+        public string Pluralize(string word)
         {
-            _uncountables.Add(word.ToLower());
+            return ApplyRules(GetCurrentRules().Plurals, word);
         }
 
-        private static void AddPlural(string rule, string replacement)
+        public string Singularize(string word)
         {
-            _plurals.Add(new Rule(rule, replacement));
+            return ApplyRules(GetCurrentRules().Singulars, word);
         }
 
-        private static void AddSingular(string rule, string replacement)
+        public string Titleize(string word)
         {
-            _singulars.Add(new Rule(rule, replacement));
+            return Regex.Replace(Humanize(Underscore(word)), @"\b([a-z])",
+                                 match => match.Captures[0].Value.ToUpper());
         }
 
-        private static readonly List<Rule> _plurals = new List<Rule>();
-        private static readonly List<Rule> _singulars = new List<Rule>();
-        private static readonly List<string> _uncountables = new List<string>();
-
-        public static string Pluralize(this string word)
+        //TODO: this must be improved to handle Pascal Casing
+        public string Humanize(string lowercaseAndUnderscoredWord)
         {
-            return ApplyRules(_plurals, word);
+            return Capitalize(Regex.Replace(lowercaseAndUnderscoredWord, @"_", " "));
         }
 
-        public static string Singularize(this string word)
+        public string Pascalize(string lowercaseAndUnderscoredWord)
         {
-            return ApplyRules(_singulars, word);
+            return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)",
+                                 match => match.Groups[1].Value.ToUpper());
         }
 
-        private static string ApplyRules(List<Rule> rules, string word)
+        public string Camelize(string lowercaseAndUnderscoredWord)
+        {
+            return Uncapitalize(Pascalize(lowercaseAndUnderscoredWord));
+        }
+
+        public string Underscore(string pascalCasedWord)
+        {
+            return Regex.Replace(
+                Regex.Replace(
+                    Regex.Replace(pascalCasedWord, @"([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
+                    "$1_$2"), @"[-\s]", "_").ToLower();
+        }
+
+        public string Capitalize(string word)
+        {
+            return word.Substring(0, 1).ToUpper() + word.Substring(1).ToLower();
+        }
+
+        public string Uncapitalize(string word)
+        {
+            return word.Substring(0, 1).ToLower() + word.Substring(1);
+        }
+
+        public string Ordinalize(int number)
+        {
+            var rules = GetCurrentRules();
+            if (rules.Ordanize != null)
+            {
+                return rules.Ordanize(number);
+            }
+            return number.ToString(_currentCulture.NumberFormat);
+        }
+
+        public string Dasherize(string underscoredWord)
+        {
+            return underscoredWord.Replace('_', '-');
+        }
+
+        private string ApplyRules(IList<InflectorRule> rules, string word)
         {
             string result = word;
 
-            if (!_uncountables.Contains(word.ToLower()))
+            if (!GetCurrentRules().Uncountables.Contains(word.ToLower()))
             {
                 for (int i = rules.Count - 1; i >= 0; i--)
                 {
@@ -149,82 +126,9 @@ namespace Inflector
             return result;
         }
 
-        public static string Titleize(this string word)
+        private InflectorRuleSet GetCurrentRules()
         {
-            return Regex.Replace(Humanize(Underscore(word)), @"\b([a-z])",
-                                 match => match.Captures[0].Value.ToUpper());
-        }
-
-        public static string Humanize(this string lowercaseAndUnderscoredWord)
-        {
-            return Capitalize(Regex.Replace(lowercaseAndUnderscoredWord, @"_", " "));
-        }
-
-        public static string Pascalize(this string lowercaseAndUnderscoredWord)
-        {
-            return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)",
-                                 match => match.Groups[1].Value.ToUpper());
-        }
-
-        public static string Camelize(this string lowercaseAndUnderscoredWord)
-        {
-            return Uncapitalize(Pascalize(lowercaseAndUnderscoredWord));
-        }
-
-        public static string Underscore(this string pascalCasedWord)
-        {
-            return Regex.Replace(
-                Regex.Replace(
-                    Regex.Replace(pascalCasedWord, @"([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
-                    "$1_$2"), @"[-\s]", "_").ToLower();
-        }
-
-        public static string Capitalize(this string word)
-        {
-            return word.Substring(0, 1).ToUpper() + word.Substring(1).ToLower();
-        }
-
-        public static string Uncapitalize(this string word)
-        {
-            return word.Substring(0, 1).ToLower() + word.Substring(1);
-        }
-
-        public static string Ordinalize(this string numberString)
-        {
-            return Ordanize(int.Parse(numberString), numberString);
-        }
-
-        public static string Ordinalize(this int number)
-        {
-            return Ordanize(number, number.ToString());
-        }
-
-        private static string Ordanize(int number, string numberString)
-        {
-            int nMod100 = number % 100;
-
-            if (nMod100 >= 11 && nMod100 <= 13)
-            {
-                return numberString + "th";
-            }
-
-            switch (number % 10)
-            {
-                case 1:
-                    return numberString + "st";
-                case 2:
-                    return numberString + "nd";
-                case 3:
-                    return numberString + "rd";
-                default:
-                    return numberString + "th";
-            }
-        }
-
-
-        public static string Dasherize(this string underscoredWord)
-        {
-            return underscoredWord.Replace('_', '-');
+            return _localizedRules[_currentCulture.Name.ToLowerInvariant()];
         }
     }
 }
