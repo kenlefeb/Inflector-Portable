@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inflector", "Inflector\Infl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inflector.Tests", "Inflector.Tests\Inflector.Tests.csproj", "{48D42B49-DAA7-47BB-9DC2-9BF2013C48C0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet Package", "NuGet Package", "{772CCF0E-BCC7-4846-A597-87263A350663}"
+	ProjectSection(SolutionItems) = preProject
+		Inflector.Portable.nupkg = Inflector.Portable.nupkg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
