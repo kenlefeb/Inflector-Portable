@@ -37,10 +37,12 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.9.10348\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CapitalizeTests.cs" />
+    <Compile Include="CultureTests.cs" />
     <Compile Include="DasherizeTests.cs" />
     <Compile Include="PortuguesePluralizeTests.cs" />
     <Compile Include="HumanizeTests.cs" />
