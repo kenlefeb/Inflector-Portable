@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Globalization;
 using NUnit.Framework;
 
 namespace Inflector.Tests
 {
     [TestFixture]
-    public class OrdinalizeTests : InflectorTestBase
+    public class EnglishOrdinalizeTests : InflectorTestBase
     {
+        public EnglishOrdinalizeTests()
+        {
+            Inflector.SetDefaultCultureFunc = () => new CultureInfo("en");
+        }
 
         [TestCase(0, "0th")]
         [TestCase(1, "1st")]
@@ -41,6 +43,5 @@ namespace Inflector.Tests
         {
             Assert.AreEqual(number.Ordinalize(), ordanized);
         }
-
     }
 }

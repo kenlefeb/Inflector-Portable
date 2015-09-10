@@ -1,9 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System.Globalization;
+using NUnit.Framework;
 
 namespace Inflector.Tests
 {
     [TestFixture]
-    public class PluralizeTests : InflectorTestBase
+    public class EnglishPluralizeTests : InflectorTestBase
     {
         [Test]
         public void Pluralize()
@@ -23,8 +24,10 @@ namespace Inflector.Tests
             }
         }
 
-        public PluralizeTests()
+        public EnglishPluralizeTests()
         {
+            Inflector.SetDefaultCultureFunc = () => new CultureInfo("en");
+
             TestData.Add("search", "searches");
             TestData.Add("switch", "switches");
             TestData.Add("fix", "fixes");
