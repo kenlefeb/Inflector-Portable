@@ -6,7 +6,7 @@ namespace Inflector.Rules
     {
         public EnglishCultureRules() :
             base(new CultureInfo("en"),
-                 rules => rules
+                 plurals => plurals
                               .Add("$", "s")
                               .Add("s$", "s")
                               .Add("(ax|test)is$", "$1es")
