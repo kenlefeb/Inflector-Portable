@@ -11,10 +11,10 @@ namespace Inflector
 
         protected CultureRules(
             [NotNull] CultureInfo culture, 
-            [NotNull] Func<GrammarRules.PluralRules, GrammarRules.PluralRules> plurals,
-            [NotNull] Func<GrammarRules.SingularRules, GrammarRules.SingularRules> singulars, 
-            [NotNull] Func<GrammarRules.IrregularRules, GrammarRules.IrregularRules> irregulars, 
-            [NotNull] Func<GrammarRules.UncountableRules, GrammarRules.UncountableRules> uncountables, 
+            [NotNull] Func<PluralRules,PluralRules> plurals,
+            [NotNull] Func<SingularRules, SingularRules> singulars, 
+            [NotNull] Func<IrregularRules, IrregularRules> irregulars, 
+            [NotNull] Func<UncountableRules, UncountableRules> uncountables, 
             [NotNull] Func<int, string> ordanizeFunc)
         {
             if (culture == null) throw new ArgumentNullException(nameof(culture));
