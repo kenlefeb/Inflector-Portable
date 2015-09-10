@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Inflector.Rules;
+using Inflector.Cultures;
 using JetBrains.Annotations;
 
 namespace Inflector

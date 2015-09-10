@@ -6,24 +6,6 @@ namespace Inflector.Tests
     [TestFixture]
     public class EnglishPluralizeTests : InflectorTestBase
     {
-        [Test]
-        public void Pluralize()
-        {
-            foreach (var pair in TestData)
-            {
-                Assert.AreEqual(pair.Key.Pluralize(), pair.Value);
-            }
-        }
-
-        [Test]
-        public void Singularize()
-        {
-            foreach (var pair in TestData)
-            {
-                Assert.AreEqual(pair.Value.Singularize(), pair.Key);
-            }
-        }
-
         public EnglishPluralizeTests()
         {
             Inflector.SetDefaultCultureFunc = () => new CultureInfo("en");
@@ -133,6 +115,24 @@ namespace Inflector.Tests
             TestData.Add("alumna", "alumnae");
             TestData.Add("alumnus", "alumni");
             TestData.Add("fungus", "fungi");
+        }
+
+        [Test]
+        public void Pluralize()
+        {
+            foreach (var pair in TestData)
+            {
+                Assert.AreEqual(pair.Value, pair.Key.Pluralize());
+            }
+        }
+
+        [Test]
+        public void Singularize()
+        {
+            foreach (var pair in TestData)
+            {
+                Assert.AreEqual(pair.Key, pair.Value.Singularize());
+            }
         }
     }
 }

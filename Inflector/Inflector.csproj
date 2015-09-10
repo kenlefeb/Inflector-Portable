@@ -43,7 +43,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Rules\CultureRule.cs" />
+    <Compile Include="Cultures\CultureRules.cs" />
+    <Compile Include="Cultures\GrammaticalGender.cs" />
     <Compile Include="Inflector.cs" />
     <Compile Include="Inflector.Extensions.cs" />
     <Compile Include="InflectorRule.cs" />
@@ -51,8 +52,8 @@
     <Compile Include="JetBrainsAnnotations.cs" />
     <Compile Include="GrammarRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rules\PortugueseCultureRules.cs" />
-    <Compile Include="Rules\EnglishCultureRules.cs" />
+    <Compile Include="Cultures\PortugueseCultureRules.cs" />
+    <Compile Include="Cultures\EnglishCultureRules.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />

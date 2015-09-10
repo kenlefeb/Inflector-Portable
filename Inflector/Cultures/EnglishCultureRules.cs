@@ -1,12 +1,11 @@
 ﻿using System.Globalization;
 
-namespace Inflector.Rules
+namespace Inflector.Cultures
 {
     public class EnglishCultureRules : CultureRules
     {
         public EnglishCultureRules() :
-            base(new CultureInfo("en"),
-                 plurals => plurals
+            base( plurals => plurals
                               .Add("$", "s")
                               .Add("s$", "s")
                               .Add("(ax|test)is$", "$1es")

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 namespace Inflector
 {
     /// <summary>
-    /// This class is not meant to be used directly.
+    ///     This class is not meant to be used directly.
     /// </summary>
     internal class InflectorRule
     {

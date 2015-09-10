@@ -42,10 +42,11 @@
   <ItemGroup>
     <Compile Include="CapitalizeTests.cs" />
     <Compile Include="DasherizeTests.cs" />
+    <Compile Include="PortuguesePluralizeTests.cs" />
     <Compile Include="HumanizeTests.cs" />
-    <Compile Include="OrdinalizeTests.cs" />
+    <Compile Include="EnglishOrdinalizeTests.cs" />
     <Compile Include="PascalizeAndCamelizeTests.cs" />
-    <Compile Include="PluralizeTests.cs" />
+    <Compile Include="EnglishPluralizeTests.cs" />
     <Compile Include="InflectorTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TitleizeTests.cs" />
