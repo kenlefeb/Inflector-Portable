@@ -14,8 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet Package", "NuGet Pack
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{1A638380-DEF4-4F38-9799-61C7EF5522B0}"
 	ProjectSection(SolutionItems) = preProject
+		icon.png = icon.png
 		LICENSE.txt = LICENSE.txt
-		README.txt = README.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
