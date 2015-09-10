@@ -7,13 +7,12 @@ titleize (...) words in a specific culture.
 
 Singular to plural word conversion.
 
-```csharp
+```c#
 
 // using extension methods
 Inflector.SetDefaultCultureFunc = () => Thread.CurrentThread.CurrentUICulture; // must be setled before using extension methods
 ...
 var cats = "cat".Pluralize(); // produces "cats" (assuming the default culture setled early is english)
-
 
 // using Inflector class
 var inflector = new Inflector(new CultureInfo("en"));
@@ -31,7 +30,6 @@ Plural to singular word conversion.
 Inflector.SetDefaultCultureFunc = () => Thread.CurrentThread.CurrentUICulture; // must be setled before using extension methods
 ...
 var homem = "homens".Singularize(); // produces: homem (assuming the default culture setled early is portuguese)
-
 
 // using Inflector class
 var inflector = new Inflector(new CultureInfo("pt"));
@@ -90,7 +88,7 @@ TBD
 
 Example for english culture rules:
 
-```charp
+```csharp
     public class EnglishCultureRules : CultureRules
     {
         public EnglishCultureRules() :
