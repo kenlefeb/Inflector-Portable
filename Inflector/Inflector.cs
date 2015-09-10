@@ -107,6 +107,7 @@ namespace Inflector
             return word.Substring(0, 1).ToLower() + word.Substring(1);
         }
 
+        //TODO: this is not generalizable to other cultures since it does not supoorts grammatical gender
         public string Ordinalize(int number)
         {
             var rules = GetCurrentRules();

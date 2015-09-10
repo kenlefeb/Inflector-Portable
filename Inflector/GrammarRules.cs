@@ -43,7 +43,7 @@ namespace Inflector
     {
         private readonly InflectorRuleSet _rules;
 
-        public PluralRules(InflectorRuleSet rules)
+        internal PluralRules(InflectorRuleSet rules)
         {
             _rules = rules;
         }
@@ -59,7 +59,7 @@ namespace Inflector
     {
         private readonly InflectorRuleSet _rules;
 
-        public SingularRules(InflectorRuleSet rules)
+        internal SingularRules(InflectorRuleSet rules)
         {
             _rules = rules;
         }
@@ -77,7 +77,7 @@ namespace Inflector
         private readonly InflectorRuleSet _rules;
         private readonly SingularRules _singulars;
 
-        public IrregularRules(InflectorRuleSet rules, SingularRules singulars, PluralRules plurals)
+        internal IrregularRules(InflectorRuleSet rules, SingularRules singulars, PluralRules plurals)
         {
             _rules = rules;
             _singulars = singulars;
@@ -96,7 +96,7 @@ namespace Inflector
     {
         private readonly InflectorRuleSet _rules;
 
-        public UncountableRules(InflectorRuleSet rules)
+        internal UncountableRules(InflectorRuleSet rules)
         {
             _rules = rules;
         }

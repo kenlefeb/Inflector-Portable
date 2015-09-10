@@ -5,7 +5,7 @@ namespace Inflector
     /// <summary>
     /// This class is not meant to be used directly.
     /// </summary>
-    public class InflectorRule
+    internal class InflectorRule
     {
         private readonly Regex _regex;
         private readonly string _replacement;

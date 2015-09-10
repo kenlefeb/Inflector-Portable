@@ -2,11 +2,10 @@
 using System.Globalization;
 using JetBrains.Annotations;
 
-namespace Inflector
+namespace Inflector.Rules
 {
     public abstract class CultureRules
     {
-        private readonly CultureInfo _culture;
         private readonly GrammarRules _rules;
 
         protected CultureRules(
@@ -22,7 +21,7 @@ namespace Inflector
             if (singulars == null) throw new ArgumentNullException(nameof(singulars));
             if (uncountables == null) throw new ArgumentNullException(nameof(uncountables));
             if (ordanizeFunc == null) throw new ArgumentNullException(nameof(ordanizeFunc));
-            _culture = culture;
+            Culture = culture;
 
             _rules = new GrammarRules();
             _rules.OrdanizeFunc = ordanizeFunc;
@@ -34,6 +33,6 @@ namespace Inflector
 
         internal InflectorRuleSet RuleSet => _rules.Rules;
 
-        public CultureInfo Culture => _culture;
+        public CultureInfo Culture { get; }
     }
 }

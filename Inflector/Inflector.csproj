@@ -43,12 +43,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CultureRule.cs" />
+    <Compile Include="Rules\CultureRule.cs" />
     <Compile Include="Inflector.cs" />
     <Compile Include="Inflector.Extensions.cs" />
     <Compile Include="InflectorRule.cs" />
     <Compile Include="InflectorRuleSet.cs" />
-    <Compile Include="InstantHandleAttribute.cs" />
     <Compile Include="JetBrainsAnnotations.cs" />
     <Compile Include="GrammarRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

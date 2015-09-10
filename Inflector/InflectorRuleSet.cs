@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Inflector
 {
-    public class InflectorRuleSet
+    internal class InflectorRuleSet
     {
         public InflectorRuleSet(IList<InflectorRule> plurals, IList<InflectorRule> singulars, IList<string> uncountables, Func<int, string> ordanizeFunc)
         {
