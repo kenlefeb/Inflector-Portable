@@ -11,7 +11,11 @@ namespace Inflector
     {
         private static CultureInfo GetCurrentCulture()
         {
-            return new CultureInfo("en");
+            if (Inflector.SetDefaultCultureFunc == null)
+            {
+                throw new NotSupportedException("Could not determinate the default culture. Make sure Inflector.SetDefaultCultureFunc is defined.");
+            }
+            return Inflector.SetDefaultCultureFunc();
         }
 
         public static string Pluralize(this string word)

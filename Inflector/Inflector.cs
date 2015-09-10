@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Inflector.Rules;
@@ -9,37 +10,50 @@ namespace Inflector
 {
     public class Inflector
     {
-        private static readonly Dictionary<string, InflectorRuleSet> _localizedRules;
+        private static readonly Dictionary<string, Lazy<InflectorRuleSet>> _localizedRules;
         private readonly CultureInfo _currentCulture;
-
-        #region Default Rules
 
         //TODO: this will be replaced with a DI engine 
         static Inflector()
         {
-            _localizedRules = new Dictionary<string, InflectorRuleSet>
-                             {
-                                 {"en", new EnglishCultureRules().RuleSet}
-                             };
+            _localizedRules = new Dictionary<string, Lazy<InflectorRuleSet>>
+                              {
+                                  {"en", new Lazy<InflectorRuleSet>(() => new EnglishCultureRules().RuleSet)},
+                                  {"pt", new Lazy<InflectorRuleSet>(() => new PortugueseCultureRules().RuleSet)}
+                              };
         }
 
-        #endregion
+        public static Func<CultureInfo> SetDefaultCultureFunc;
 
-        public Inflector(CultureInfo culture)
+        public Inflector([NotNull] CultureInfo culture)
         {
-            _currentCulture = culture;
+            if (culture == null) throw new ArgumentNullException(nameof(culture));
 
-            if (!_localizedRules.ContainsKey(_currentCulture.Name.ToLowerInvariant()))
+            _currentCulture = GetMostSimilarCulture(culture);
+
+            if (_currentCulture == null)
             {
-                //TODO: implementation missing
+                if (SetDefaultCultureFunc != null)
+                {
+                    Debug.Write("Falling back to default culture.", "WARN");
+                    _currentCulture = GetMostSimilarCulture(SetDefaultCultureFunc());
+                }
+
+                if (_currentCulture == null)
+                {
+                    throw new NotSupportedException($"The specificed culture '{culture.Name}' is not supported.");
+                }
             }
+
         }
 
         public bool SupportsCulture([NotNull] CultureInfo culture)
         {
             if (culture == null) throw new ArgumentNullException(nameof(culture));
 
-            return _localizedRules.ContainsKey(culture.Name);
+            var mostSimilarCulture = GetMostSimilarCulture(culture);
+
+            return mostSimilarCulture != null;
         }
 
         public string Pluralize(string word)
@@ -108,6 +122,25 @@ namespace Inflector
             return underscoredWord.Replace('_', '-');
         }
 
+        private CultureInfo GetMostSimilarCulture(CultureInfo culture)
+        {
+            var cultureName = culture.Name.ToLowerInvariant();
+            if (_localizedRules.ContainsKey(cultureName))
+            {
+                return culture;
+            }
+            if (cultureName.Length > 2)
+            {
+                cultureName = cultureName.Substring(0, 2);
+                if (_localizedRules.ContainsKey(cultureName))
+                {
+                    return new CultureInfo(cultureName);
+                }
+            }
+
+            return null;
+        }
+
         private string ApplyRules(IList<InflectorRule> rules, string word)
         {
             string result = word;
@@ -128,7 +161,7 @@ namespace Inflector
 
         private InflectorRuleSet GetCurrentRules()
         {
-            return _localizedRules[_currentCulture.Name.ToLowerInvariant()];
+            return _localizedRules[_currentCulture.Name.ToLowerInvariant()].Value;
         }
     }
 }
