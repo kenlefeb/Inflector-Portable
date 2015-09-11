@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Globalization;
+using NUnit.Framework;
 
 namespace Inflector.Tests
 {
@@ -8,6 +9,8 @@ namespace Inflector.Tests
         [Test]
         public void Dasherize()
         {
+            Inflector.SetDefaultCultureFunc = () => new CultureInfo("en");
+
             foreach (var pair in TestData)
             {
                 Assert.AreEqual(pair.Key.Dasherize(), pair.Value);
