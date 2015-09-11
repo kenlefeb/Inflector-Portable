@@ -157,7 +157,7 @@ namespace Inflector
                 }
             }
 
-            return result;
+            return result ?? word;
         }
 
         private InflectorRuleSet GetCurrentRules()

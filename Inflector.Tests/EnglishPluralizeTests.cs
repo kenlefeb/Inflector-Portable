@@ -105,7 +105,6 @@ namespace Inflector.Tests
             TestData.Add("prize", "prizes");
             TestData.Add("edge", "edges");
 
-            /* Tests added by Bas Jansen */
             TestData.Add("goose", "geese");
             TestData.Add("deer", "deer");
             TestData.Add("sheep", "sheep");
@@ -115,6 +114,9 @@ namespace Inflector.Tests
             TestData.Add("alumna", "alumnae");
             TestData.Add("alumnus", "alumni");
             TestData.Add("fungus", "fungi");
+
+            TestData.Add("list", "lists");
+            TestData.Add("customer", "customers");
         }
 
         [Test]
@@ -128,6 +130,22 @@ namespace Inflector.Tests
 
         [Test]
         public void Singularize()
+        {
+            foreach (var pair in TestData)
+            {
+                Assert.AreEqual(pair.Key, pair.Value.Singularize());
+            }
+        }
+
+        [Test]
+        public void SingularizeSingular()
+        {
+            Assert.AreEqual("list", "list".Singularize());
+            Assert.AreEqual("information", "information".Singularize());
+        }
+
+        [Test]
+        public void PluralizePlural()
         {
             foreach (var pair in TestData)
             {
