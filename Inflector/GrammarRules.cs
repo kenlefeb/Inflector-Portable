@@ -3,42 +3,6 @@ using System.Collections.Generic;
 
 namespace Inflector
 {
-    internal class GrammarRules
-    {
-        internal GrammarRules()
-        {
-            Rules = new InflectorRuleSet(
-                new List<InflectorRule>(),
-                new List<InflectorRule>(),
-                new List<string>(), 
-                null);
-
-            Plurals = new PluralRules(Rules);
-            Singulars = new SingularRules(Rules);
-            Irregulars = new IrregularRules(Rules, Singulars, Plurals);
-            Uncountables = new UncountableRules(Rules);
-
-        }
-
-        public Func<int, string> OrdanizeFunc
-        {
-            get { return Rules.Ordanize; }
-            set { Rules.Ordanize = value; } 
-        }
-
-        public PluralRules Plurals { get; }
-
-        public SingularRules Singulars { get; }
-
-        public IrregularRules Irregulars { get; }
-
-        public UncountableRules Uncountables { get; }
-
-        internal InflectorRuleSet Rules { get; }
-
-   
-    }
-
     public class PluralRules
     {
         private readonly InflectorRuleSet _rules;
@@ -74,12 +38,10 @@ namespace Inflector
     public class IrregularRules
     {
         private readonly PluralRules _plurals;
-        private readonly InflectorRuleSet _rules;
         private readonly SingularRules _singulars;
 
-        internal IrregularRules(InflectorRuleSet rules, SingularRules singulars, PluralRules plurals)
+        internal IrregularRules(SingularRules singulars, PluralRules plurals)
         {
-            _rules = rules;
             _singulars = singulars;
             _plurals = plurals;
         }

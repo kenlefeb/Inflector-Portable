@@ -10,20 +10,22 @@ namespace Inflector
 {
     public class Inflector
     {
-        private static readonly Dictionary<string, Lazy<InflectorRuleSet>> _localizedRules;
+        private static readonly Dictionary<string, Lazy<CultureRules>> _localizedRules;
         private readonly CultureInfo _currentCulture;
 
         //TODO: this will be replaced with a DI engine 
         static Inflector()
         {
-            _localizedRules = new Dictionary<string, Lazy<InflectorRuleSet>>
+            _localizedRules = new Dictionary<string, Lazy<CultureRules>>
                               {
-                                  {"en", new Lazy<InflectorRuleSet>(() => new EnglishCultureRules().RuleSet)},
-                                  {"pt", new Lazy<InflectorRuleSet>(() => new PortugueseCultureRules().RuleSet)}
+                                  {"en", new Lazy<CultureRules>(() => new EnglishCultureRules())},
+                                  {"pt", new Lazy<CultureRules>(() => new PortugueseCultureRules())}
                               };
         }
 
         public static Func<CultureInfo> SetDefaultCultureFunc;
+
+        public CultureRules CurrentCultureRules => _localizedRules[_currentCulture.Name.ToLowerInvariant()]?.Value;
 
         public Inflector([NotNull] CultureInfo culture)
         {
@@ -162,7 +164,7 @@ namespace Inflector
 
         private InflectorRuleSet GetCurrentRules()
         {
-            return _localizedRules[_currentCulture.Name.ToLowerInvariant()].Value;
+            return _localizedRules[_currentCulture.Name.ToLowerInvariant()].Value.RuleSet;
         }
     }
 }
