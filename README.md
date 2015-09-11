@@ -7,7 +7,7 @@ titleize (...) words in a specific culture.
 
 Singular to plural word conversion.
 
-```c#
+```csharp
 
 // using extension methods
 Inflector.SetDefaultCultureFunc = () => Thread.CurrentThread.CurrentUICulture; // must be setled before using extension methods
@@ -54,7 +54,7 @@ Lowers the first char and leaves the remaining text unchanged.
 
 ```csharp
 
-var sentence = "The quick brown FOX jumps over the lazy dog".Capitalize();
+var sentence = "The quick brown FOX jumps over the lazy dog".Uncapitalize();
 // produces: the quick brown FOX jumps over the lazy dog
 
 ```
